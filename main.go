@@ -12,9 +12,9 @@ import (
 	sdkprometheus "github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	cron "github.com/robfig/cron/v3"
-	"github.io/ssslkj123/ephemeral-exporter/openfalcon"
-	"github.io/ssslkj123/ephemeral-exporter/pods"
-	"github.io/ssslkj123/ephemeral-exporter/prometheus"
+	"github.com/ssslkj123/ephemeral-exporter/openfalcon"
+	"github.com/ssslkj123/ephemeral-exporter/pods"
+	"github.com/ssslkj123/ephemeral-exporter/prometheus"
 	"k8s.io/klog"
 )
 

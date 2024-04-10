@@ -8,8 +8,8 @@ import (
 	"time"
 
 	resty "github.com/go-resty/resty/v2"
-	"github.io/ssslkj123/ephemeral-exporter/types"
-	"github.io/ssslkj123/ephemeral-exporter/utils"
+	"github.com/ssslkj123/ephemeral-exporter/types"
+	"github.com/ssslkj123/ephemeral-exporter/utils"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog"
 )

@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.io/ssslkj123/ephemeral-exporter/types"
+	"github.com/ssslkj123/ephemeral-exporter/types"
 )
 
 var (

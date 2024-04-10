@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/go-resty/resty/v2"
-	"github.io/ssslkj123/ephemeral-exporter/types"
+	"github.com/ssslkj123/ephemeral-exporter/types"
 	"k8s.io/klog"
 )
 
