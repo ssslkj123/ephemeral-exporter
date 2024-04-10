@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sa-ephemeral-exporter
+  namespace: ops
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: token-ephemeral-exporter
+  namespace: ops
+  annotations:
+    kubernetes.io/service-account.name: sa-ephemeral-exporter
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cr-ephemeral-exporter
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: crb-ephemeral-exporter
+subjects:
+- kind: ServiceAccount
+  name: sa-ephemeral-exporter
+  namespace: ops
+roleRef:
+  kind: ClusterRole
+  name: cr-ephemeral-exporter
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ephemeral-exporter
+  namespace: ops
+  labels:
+    app: ephemeral-exporter
+    version: v2.1
+spec:
+  selector:
+    matchLabels:
+      app: ephemeral-exporter
+  template:
+    metadata:
+      labels:
+        app: ephemeral-exporter
+        version: v2.1
+    spec:
+      containers:
+      - name: main
+        image: docker.io/ssslkj123/ephemeral-exporter:v1
+        imagePullPolicy: Always
+        env:
+        - name: NodeName
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: NodeIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: env
+          value: prod
+        - name: cluster
+          value: k8s-prod
+        - name: METRIC_PORT
+          value: "9200"
+        - name: METRIC_URI
+          value: /metrics
+        ports:
+        - name: metrics
+          containerPort: 9200
+          protocol: TCP
+        volumeMounts:
+        - name: tz-config
+          mountPath: /etc/localtime
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 500m
+            memory: 500Mi
+      serviceAccount: sa-ephemeral-exporter
+      volumes:
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/Asia/Shanghai
+          type: File

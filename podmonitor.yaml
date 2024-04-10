@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: pod-ephemeral-storage-exporter
+  namespace: ops
+  annotations:
+    arms.prometheus.io/discovery: "true"
+  labels:
+    app: pod-ephemeral-storage-exporter
+spec:
+  namespaceSelector:
+    matchNames:
+    - ops
+  selector:
+    matchLabels:
+      app: pod-ephemeral-storage-exporter
+  podMetricsEndpoints:
+  - interval: 60s
+    path: /metrics
+    port: metrics
+    scheme: http
+    scrapeTimeout: 30s
